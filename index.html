@@ -99,6 +99,10 @@
                     iframe.referrerPolicy = 'strict-origin';
                     output.parentElement.appendChild(iframe);
                 } else {
+                    var debug = document.createElement('div');
+                    debug.className = 'src-debug';
+                    debug.innerHTML = '<strong>Request:</strong><br>hash: ' + hash + '<br>user: ' + user + '<br>cmp: ' + cmp + '<br><br><strong>Response:</strong><br>success: ' + data.success + '<br>mensaje: ' + (data.mensaje || '-') + '<br>hash: ' + (data.hash || '-');
+                    output.parentElement.appendChild(debug);
                     output.className = 'error';
                     output.textContent = data.mensaje || 'No se pudo procesar la solicitud.';
                 }
