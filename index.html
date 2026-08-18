@@ -52,8 +52,6 @@
         (function () {
             var params = new URLSearchParams(window.location.search);
             var hash = params.get('hash');
-            var user = params.get('user');
-            var cmp = params.get('cmp');
             var output = document.getElementById('output');
 
             function showError(title, msg) {
@@ -63,15 +61,15 @@
                     '<div class="error-msg">' + msg + '</div>';
             }
 
-            if (!hash || !user || !cmp) {
-                showError('Parámetros faltantes', 'Se requiere: hash, user y cmp.');
+            if (!hash) {
+                showError('Parámetros faltantes', 'Se requiere: hash.');
                 return;
             }
 
             fetch('https://n8n.dataroomperu.com/webhook/ada7bfa0-0cd9-4fbc-98bf-b3af19bde2a5', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ hash: hash, user: user, cmp: Number(cmp) })
+                body: JSON.stringify({ hash: hash })
             })
             .then(function (res) { return res.json(); })
             .then(function (data) {
