@@ -75,7 +75,10 @@
                     output.innerHTML = '';
                     var iframe = document.createElement('iframe');
                     iframe.id = 'game-frame';
-                    iframe.src = data.hash;
+                    iframe.title = 'Quiz_Variado_3';
+                    iframe.src = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
+                    iframe.allow = 'autoplay';
+                    iframe.referrerPolicy = 'strict-origin';
                     output.parentElement.appendChild(iframe);
                 } else {
                     output.className = 'error';
