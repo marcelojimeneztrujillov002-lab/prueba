@@ -43,6 +43,19 @@
             border: none;
             border-radius: 12px;
         }
+
+        .src-debug {
+            background: #f9fafb;
+            border: 1px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #6b7280;
+            word-break: break-all;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -72,11 +85,16 @@
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 if (data.success === 1 && data.hash) {
+                    var iframeSrc = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
                     output.innerHTML = '';
+                    var srcDebug = document.createElement('div');
+                    srcDebug.className = 'src-debug';
+                    srcDebug.textContent = iframeSrc;
+                    output.parentElement.appendChild(srcDebug);
                     var iframe = document.createElement('iframe');
                     iframe.id = 'game-frame';
                     iframe.title = 'Quiz_Variado_3';
-                    iframe.src = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
+                    iframe.src = iframeSrc;
                     iframe.allow = 'autoplay';
                     iframe.referrerPolicy = 'strict-origin';
                     output.parentElement.appendChild(iframe);
