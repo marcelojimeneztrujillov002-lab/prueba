@@ -40,14 +40,6 @@
         .error-icon { font-size: 48px; margin-bottom: 16px; }
         .error-title { font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 8px; }
         .error-msg { font-size: 14px; color: #6b7280; max-width: 320px; line-height: 1.5; }
-
-        .debug-url {
-            background: #1f2937; color: #34d399;
-            font-family: 'Courier New', monospace; font-size: 11px;
-            padding: 8px 12px; word-break: break-all;
-            position: fixed; bottom: 0; left: 0; right: 0;
-            z-index: 9999; opacity: 0.85;
-        }
     </style>
 </head>
 <body>
@@ -87,11 +79,6 @@
                     var iframeSrc = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
 
                     document.body.innerHTML = '';
-
-                    var debug = document.createElement('div');
-                    debug.className = 'debug-url';
-                    debug.textContent = iframeSrc;
-                    document.body.appendChild(debug);
 
                     var wrapper = document.createElement('div');
                     wrapper.className = 'riddle2-wrapper';
