@@ -6,8 +6,8 @@
     <title>UnicoLink</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; overflow: hidden; }
-        iframe { width: 100%; height: 100%; border: none; }
+        html, body { width: 100%; height: 100%; overflow: auto; }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
 
         .screen {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -84,7 +84,7 @@
 
                     var curtain = document.createElement('div');
                     curtain.className = 'curtain';
-                    curtain.innerHTML = '<div class="loader"></div><p class="loader-text">Preparando tu juego...</p>';
+                    curtain.innerHTML = '<div class="loader"></div>';
                     document.body.appendChild(curtain);
 
                     var iframe = document.createElement('iframe');
@@ -96,7 +96,7 @@
                     setTimeout(function () {
                         curtain.classList.add('hide');
                         setTimeout(function () { curtain.remove(); }, 600);
-                    }, 2000);
+                    }, 5000);
                 } else {
                     showError('Algo salió mal', data.mensaje || 'No se pudo procesar la solicitud.');
                 }
