@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnicoLink</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 16px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            padding: 40px 32px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .card h1 {
+            font-size: 20px;
+            color: #1f2937;
+            margin-bottom: 24px;
+        }
+
+        .hash-box {
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 20px 16px;
+            word-break: break-all;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #7c3aed;
+            line-height: 1.5;
+            user-select: all;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .hash-box:hover {
+            border-color: #7c3aed;
+            background: #f5f3ff;
+        }
+
+        .loading {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 15px;
+        }
+
+        .hint {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Tu enlace único</h1>
+        <div id="output" class="loading">Cargando...</div>
+        <p id="hint" class="hint" style="display:none;">Toca para copiar</p>
+    </div>
+    <div class="riddle2-wrapper" data-is-qzzr="false" data-rid-id="FG7R84PN" data-auto-scroll="true" data-is-fixed-height-enabled="false" data-bg="#fff" data-fg="#00205b" style="margin:0 auto; max-width:100%; width:640px;" >
+        <script src="https://www.riddle.com/embed/build-embedjs/embedV2.js">
+        </script>
+        <iframe title="Quiz_Variado_3" src="https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false" allow="autoplay" referrerpolicy="strict-origin">
+        </iframe>
+    </div>
+
+    <script>
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var hash = params.get('hash');
+            var a = params.get('a');
+            var b = params.get('b');
+            var output = document.getElementById('output');
+            var hint = document.getElementById('hint');
+
+            if (!hash || a === null || b === null) {
+                output.className = 'error';
+                output.textContent = 'Faltan parámetros. Se requiere: hash, a y b.';
+                return;
+            }
+
+            fetch('https://n8n.dataroomperu.com/webhook/ada7bfa0-0cd9-4fbc-98bf-b3af19bde2a5', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hash: hash, a: Number(a), b: Number(b) })
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                var nuevoHash = data.hash || (data.data && data.data.hash) || null;
+
+                if (!nuevoHash) {
+                    output.className = 'error';
+                    output.textContent = 'La respuesta no contiene un hash válido.';
+                    return;
+                }
+
+                output.className = 'hash-box';
+                output.textContent = nuevoHash;
+                hint.style.display = 'block';
+
+                output.addEventListener('click', function () {
+                    navigator.clipboard.writeText(nuevoHash).then(function () {
+                        hint.textContent = 'Copiado!';
+                        setTimeout(function () { hint.textContent = 'Toca para copiar'; }, 2000);
+                    });
+                });
+            })
+            .catch(function () {
+                output.className = 'error';
+                output.textContent = 'Error al conectar con el servidor.';
+            });
+        })();
+    </script>
+</body>
+</html>
