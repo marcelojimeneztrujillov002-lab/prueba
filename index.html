@@ -51,6 +51,78 @@
     </style>
 </head>
 <body>
-   <div class="riddle2-wrapper" data-is-qzzr="false" data-rid-id="FG7R84PN" data-auto-scroll="true" data-is-fixed-height-enabled="false" data-bg="#fff" data-fg="#00205b" style="margin:0 auto; max-width:100%; width:640px;" ><script src="https://www.riddle.com/embed/build-embedjs/embedV2.js"></script><iframe title="Quiz_Variado_3" src="https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=SEuieughfkjsdkjdsf27777DD7" allow="autoplay" referrerpolicy="strict-origin"></iframe></div>
+    <div id="output" class="screen">
+        <div class="loader"></div>
+        <p class="loader-text">Preparando tu juego...</p>
+    </div>
+
+    <script>
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var hash = params.get('hash');
+            var user = params.get('user');
+            var cmp = params.get('cmp');
+            var output = document.getElementById('output');
+
+            function showError(title, msg) {
+                output.className = 'screen';
+                output.innerHTML = '<div class="error-icon">&#9888;</div>' +
+                    '<div class="error-title">' + title + '</div>' +
+                    '<div class="error-msg">' + msg + '</div>';
+            }
+
+            if (!hash || !user || !cmp) {
+                showError('Parámetros faltantes', 'Se requiere: hash, user y cmp.');
+                return;
+            }
+
+            fetch('https://n8n.dataroomperu.com/webhook/ada7bfa0-0cd9-4fbc-98bf-b3af19bde2a5', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hash: hash, user: user, cmp: Number(cmp) })
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data.success === 1 && data.hash) {
+                    var iframeSrc = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
+
+                    document.body.innerHTML = '';
+
+                    var debug = document.createElement('div');
+                    debug.className = 'debug-url';
+                    debug.textContent = iframeSrc;
+                    document.body.appendChild(debug);
+
+                    var wrapper = document.createElement('div');
+                    wrapper.className = 'riddle2-wrapper';
+                    wrapper.setAttribute('data-is-qzzr', 'false');
+                    wrapper.setAttribute('data-rid-id', 'FG7R84PN');
+                    wrapper.setAttribute('data-auto-scroll', 'true');
+                    wrapper.setAttribute('data-is-fixed-height-enabled', 'false');
+                    wrapper.setAttribute('data-bg', '#fff');
+                    wrapper.setAttribute('data-fg', '#00205b');
+                    wrapper.style.cssText = 'margin:0 auto; max-width:100%; width:640px;';
+
+                    var script = document.createElement('script');
+                    script.src = 'https://www.riddle.com/embed/build-embedjs/embedV2.js';
+
+                    var iframe = document.createElement('iframe');
+                    iframe.title = 'Quiz_Variado_3';
+                    iframe.src = iframeSrc;
+                    iframe.allow = 'autoplay';
+                    iframe.referrerPolicy = 'strict-origin';
+
+                    wrapper.appendChild(script);
+                    wrapper.appendChild(iframe);
+                    document.body.appendChild(wrapper);
+                } else {
+                    showError('Algo salió mal', data.mensaje || 'No se pudo procesar la solicitud.');
+                }
+            })
+            .catch(function () {
+                showError('Sin conexión', 'No se pudo conectar con el servidor. Intenta de nuevo.');
+            });
+        })();
+    </script>
 </body>
 </html>
