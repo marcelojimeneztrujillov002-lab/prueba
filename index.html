@@ -50,6 +50,10 @@
 
     <script>
         (function () {
+            var QUIZ_CODES = ['FG7R84PN', 'zK0oP706', '95yaBx3X'];
+
+            var quizId = QUIZ_CODES[Math.floor(Math.random() * QUIZ_CODES.length)];
+
             var params = new URLSearchParams(window.location.search);
             var hash = params.get('hash');
             var output = document.getElementById('output');
@@ -74,14 +78,14 @@
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 if (data.success === 1 && data.hash) {
-                    var iframeSrc = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
+                    var iframeSrc = 'https://www.riddle.com/embed/a/' + quizId + '?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
 
                     document.body.innerHTML = '';
 
                     var wrapper = document.createElement('div');
                     wrapper.className = 'riddle2-wrapper';
                     wrapper.setAttribute('data-is-qzzr', 'false');
-                    wrapper.setAttribute('data-rid-id', 'FG7R84PN');
+                    wrapper.setAttribute('data-rid-id', quizId);
                     wrapper.setAttribute('data-auto-scroll', 'true');
                     wrapper.setAttribute('data-is-fixed-height-enabled', 'false');
                     wrapper.setAttribute('data-bg', '#fff');
