@@ -23,27 +23,12 @@
             animation: spin 0.8s linear infinite;
         }
 
-        .loader-text {
-            margin-top: 16px; color: #6b7280; font-size: 14px;
-        }
-
+        .loader-text { margin-top: 16px; color: #6b7280; font-size: 14px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .error-icon { font-size: 48px; margin-bottom: 16px; }
         .error-title { font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 8px; }
         .error-msg { font-size: 14px; color: #6b7280; max-width: 320px; line-height: 1.5; }
-
-        .curtain {
-            position: fixed; inset: 0; z-index: 9999;
-            background: #7c3aed;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-
-        .curtain.hide { opacity: 0; pointer-events: none; }
-
-        .curtain .loader { border-color: rgba(255,255,255,0.2); border-top-color: #fff; }
-        .curtain .loader-text { color: rgba(255,255,255,0.8); }
     </style>
 </head>
 <body>
@@ -80,23 +65,7 @@
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 if (data.success === 1 && data.hash) {
-                    var iframeSrc = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
-
-                    var curtain = document.createElement('div');
-                    curtain.className = 'curtain';
-                    curtain.innerHTML = '<div class="loader"></div>';
-                    document.body.appendChild(curtain);
-
-                    var iframe = document.createElement('iframe');
-                    iframe.src = iframeSrc;
-                    iframe.allow = 'autoplay';
-                    iframe.referrerPolicy = 'strict-origin';
-                    document.body.appendChild(iframe);
-
-                    setTimeout(function () {
-                        curtain.classList.add('hide');
-                        setTimeout(function () { curtain.remove(); }, 600);
-                    }, 5000);
+                    document.body.innerHTML = '<iframe src="https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash) + '" allow="autoplay" referrer-policy="strict-origin"></iframe>';
                 } else {
                     showError('Algo salió mal', data.mensaje || 'No se pudo procesar la solicitud.');
                 }
