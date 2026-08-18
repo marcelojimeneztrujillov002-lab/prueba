@@ -52,22 +52,22 @@
 
     <script>
         (function () {
-            var params = new URLSearchParams(window.location.search.replace(/&amp;/g, '&'));
+            var params = new URLSearchParams(window.location.search);
             var hash = params.get('hash');
-            var a = params.get('a');
-            var b = params.get('b');
+            var user = params.get('user');
+            var cmp = params.get('cmp');
             var output = document.getElementById('output');
 
-            if (!hash || a === null || b === null) {
+            if (!hash || !user || !cmp) {
                 output.className = 'error';
-                output.textContent = 'Faltan parámetros. Se requiere: hash, a y b.';
+                output.textContent = 'Faltan parámetros. Se requiere: hash, user y cmp.';
                 return;
             }
 
             fetch('https://n8n.dataroomperu.com/webhook/ada7bfa0-0cd9-4fbc-98bf-b3af19bde2a5', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ hash: hash, a: Number(a), b: Number(b) })
+                body: JSON.stringify({ hash: hash, user: user, cmp: Number(cmp) })
             })
             .then(function (res) { return res.json(); })
             .then(function (data) {
