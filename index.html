@@ -72,18 +72,25 @@
             var output = document.getElementById('output');
 
             if (!hash || !user || !cmp) {
+                console.log('Faltan parámetros:', { hash: hash, user: user, cmp: cmp });
                 output.className = 'error';
                 output.textContent = 'Faltan parámetros. Se requiere: hash, user y cmp.';
                 return;
             }
 
+            console.log('Parámetros:', { hash: hash, user: user, cmp: cmp });
+
+            var requestBody = { hash: hash, user: user, cmp: Number(cmp) };
+            console.log('Request body:', JSON.stringify(requestBody));
+
             fetch('https://n8n.dataroomperu.com/webhook/ada7bfa0-0cd9-4fbc-98bf-b3af19bde2a5', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ hash: hash, user: user, cmp: Number(cmp) })
+                body: JSON.stringify(requestBody)
             })
             .then(function (res) { return res.json(); })
             .then(function (data) {
+                console.log('Response:', JSON.stringify(data));
                 if (data.success === 1 && data.hash) {
                     var iframeSrc = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
                     output.innerHTML = '';
@@ -107,7 +114,8 @@
                     output.textContent = data.mensaje || 'No se pudo procesar la solicitud.';
                 }
             })
-            .catch(function () {
+            .catch(function (err) {
+                console.log('Error fetch:', err);
                 output.className = 'error';
                 output.textContent = 'Error al conectar con el servidor.';
             });
