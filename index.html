@@ -43,19 +43,6 @@
             border: none;
             border-radius: 12px;
         }
-
-        .src-debug {
-            background: #f9fafb;
-            border: 1px dashed #d1d5db;
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 12px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            color: #6b7280;
-            word-break: break-all;
-            text-align: left;
-        }
     </style>
 </head>
 <body>
@@ -72,50 +59,33 @@
             var output = document.getElementById('output');
 
             if (!hash || !user || !cmp) {
-                console.log('Faltan parámetros:', { hash: hash, user: user, cmp: cmp });
                 output.className = 'error';
                 output.textContent = 'Faltan parámetros. Se requiere: hash, user y cmp.';
                 return;
             }
 
-            console.log('Parámetros:', { hash: hash, user: user, cmp: cmp });
-
-            var requestBody = { hash: hash, user: user, cmp: Number(cmp) };
-            console.log('Request body:', JSON.stringify(requestBody));
-
             fetch('https://n8n.dataroomperu.com/webhook/ada7bfa0-0cd9-4fbc-98bf-b3af19bde2a5', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify({ hash: hash, user: user, cmp: Number(cmp) })
             })
             .then(function (res) { return res.json(); })
             .then(function (data) {
-                console.log('Response:', JSON.stringify(data));
                 if (data.success === 1 && data.hash) {
-                    var iframeSrc = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
                     output.innerHTML = '';
-                    var srcDebug = document.createElement('div');
-                    srcDebug.className = 'src-debug';
-                    srcDebug.textContent = iframeSrc;
-                    output.parentElement.appendChild(srcDebug);
                     var iframe = document.createElement('iframe');
                     iframe.id = 'game-frame';
                     iframe.title = 'Quiz_Variado_3';
-                    iframe.src = iframeSrc;
+                    iframe.src = 'https://www.riddle.com/embed/a/FG7R84PN?lazyImages=false&staticHeight=false&source=' + encodeURIComponent(data.hash);
                     iframe.allow = 'autoplay';
                     iframe.referrerPolicy = 'strict-origin';
                     output.parentElement.appendChild(iframe);
                 } else {
-                    var debug = document.createElement('div');
-                    debug.className = 'src-debug';
-                    debug.innerHTML = '<strong>Request:</strong><br>hash: ' + hash + '<br>user: ' + user + '<br>cmp: ' + cmp + '<br><br><strong>Response:</strong><br>success: ' + data.success + '<br>mensaje: ' + (data.mensaje || '-') + '<br>hash: ' + (data.hash || '-');
-                    output.parentElement.appendChild(debug);
                     output.className = 'error';
                     output.textContent = data.mensaje || 'No se pudo procesar la solicitud.';
                 }
             })
-            .catch(function (err) {
-                console.log('Error fetch:', err);
+            .catch(function () {
                 output.className = 'error';
                 output.textContent = 'Error al conectar con el servidor.';
             });
