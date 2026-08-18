@@ -52,7 +52,7 @@
 
     <script>
         (function () {
-            var params = new URLSearchParams(window.location.search);
+            var params = new URLSearchParams(window.location.search.replace(/&amp;/g, '&'));
             var hash = params.get('hash');
             var a = params.get('a');
             var b = params.get('b');
